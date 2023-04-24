@@ -106,6 +106,14 @@ int main() {
       }
     }
 
+    if (area.check_win()) {
+      mine.setFillColor(sf::Color(219, 172, 52));
+      mine.setOutlineColor(sf::Color(199, 152, 32));
+
+      flag.setFillColor(sf::Color(219, 172, 52));
+      flag.setOutlineColor(sf::Color(199, 152, 32));
+    }
+
     window.display();
   }
 

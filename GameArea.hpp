@@ -11,6 +11,8 @@
 class GameArea {
 private:
   std::vector<std::vector<Field>> area;
+  uint revealed;
+  uint mines;
 
 public:
   GameArea(uint, uint, uint);
@@ -24,6 +26,7 @@ public:
   void flag(uint, uint);
   void reveal();
   void reveal_empty(uint, uint);
+  bool check_win();
 };
 
 #endif

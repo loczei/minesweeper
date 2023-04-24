@@ -5,6 +5,9 @@ GameArea::GameArea(unsigned int sx, unsigned int sy, unsigned int mines) {
   this->area =
       std::vector<std::vector<Field>>(sy, std::vector<Field>(sx, Field()));
 
+  this->revealed = 0;
+  this->mines = mines;
+
   std::cout << "Generating new game area with size " << sx << " " << sy
             << std::endl;
 
@@ -79,7 +82,7 @@ void GameArea::flag(uint x, uint y) {
 
 void GameArea::reveal_empty(uint x, uint y) {
   this->get(x, y).set_clicked(true);
-
+  this->revealed++;
   int to_check[8][2] = {{-1, -1}, {-1, 0}, {-1, 1}, {0, -1},
                         {0, 1},   {1, -1}, {1, 0},  {1, 1}};
 
@@ -91,6 +94,7 @@ void GameArea::reveal_empty(uint x, uint y) {
         if (field.get_amount_of_mines() == 0) {
           this->reveal_empty(x + e[1], y + e[0]);
         } else {
+          this->revealed++;
           this->get(x + e[1], y + e[0]).set_clicked(true);
         }
       }
@@ -105,8 +109,11 @@ void GameArea::click(uint x, uint y) {
 
   if (this->get(x, y).get_amount_of_mines() == 0) {
     this->reveal_empty(x, y);
+
+    return;
   }
 
+  this->revealed++;
   this->get(x, y).set_clicked(true);
 }
 
@@ -116,4 +123,27 @@ void GameArea::reveal() {
       f.set_clicked(true);
     }
   }
+}
+
+bool GameArea::check_win() {
+  if (this->size_x() * this->size_y() - this->mines <= this->revealed) {
+    this->reveal();
+    return true;
+  }
+
+  uint flagged_mines = 0;
+
+  for (auto &x : this->area) {
+    for (auto &f : x) {
+      if (f.is_flagged() && f.is_mine())
+        flagged_mines++;
+    }
+  }
+
+  if (this->mines <= flagged_mines) {
+    this->reveal();
+    return true;
+  }
+
+  return false;
 }
