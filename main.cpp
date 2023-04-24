@@ -68,8 +68,7 @@ int main() {
         uint x = floor(mouse_pos.x / 30);
         uint y = floor(mouse_pos.y / 30);
         if (event.mouseButton.button == sf::Mouse::Left) {
-          if (!area.get(x, y).is_flagged())
-            area.click(x, y);
+          area.click(x, y);
         } else {
           if (!area.get(x, y).is_clicked())
             area.flag(x, y);

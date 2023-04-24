@@ -104,8 +104,19 @@ void GameArea::reveal_empty(uint x, uint y) {
 }
 
 void GameArea::click(uint x, uint y) {
-  if (this->get(x, y).is_mine())
+  if (this->get(x, y).is_flagged())
+    return;
+
+  if (this->get(x, y).is_clicked()) {
+    this->flagged_click(x, y);
+
+    return;
+  }
+
+  if (this->get(x, y).is_mine()) {
     this->reveal();
+    return;
+  }
 
   if (this->get(x, y).get_amount_of_mines() == 0) {
     this->reveal_empty(x, y);
@@ -146,4 +157,36 @@ bool GameArea::check_win() {
   }
 
   return false;
+}
+
+void GameArea::flagged_click(uint x, uint y) {
+  uint mines = this->get(x, y).get_amount_of_mines();
+
+  uint flags = 0;
+
+  int to_check[8][2] = {{-1, -1}, {-1, 0}, {-1, 1}, {0, -1},
+                        {0, 1},   {1, -1}, {1, 0},  {1, 1}};
+  for (auto e : to_check) {
+    try {
+      std::cout << "Getting b" << x + e[1] << " " << y + e[0] << std::endl;
+      flags += this->get(x + e[1], y + e[0]).is_flagged();
+    } catch (int e) {
+    }
+  }
+
+  std::cout << "Flags " << flags << std::endl;
+
+  if (flags == mines) {
+    for (auto e : to_check) {
+      try {
+        std::cout << "Getting bruh " << x + e[1] << " " << y + e[0]
+                  << std::endl;
+
+        if (!this->get(x + e[1], y + e[0]).is_clicked()) {
+          this->click(x + e[1], y + e[0]);
+        }
+      } catch (int e) {
+      }
+    }
+  }
 }

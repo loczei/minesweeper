@@ -27,6 +27,7 @@ public:
   void reveal();
   void reveal_empty(uint, uint);
   bool check_win();
+  void flagged_click(uint, uint);
 };
 
 #endif
