@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/Window/Keyboard.hpp>
 #include <SFML/Window/Mouse.hpp>
 #include <SFML/Window/VideoMode.hpp>
 #include <cmath>
@@ -23,8 +24,6 @@ int main() {
   std::cin >> m;
 
   GameArea area(sx, sy, m);
-
-  area.debug_print();
 
   sf::RenderWindow window(sf::VideoMode(sx * 30, sy * 30), "Saper");
 
@@ -62,6 +61,18 @@ int main() {
     while (window.pollEvent(event)) {
       if (event.type == sf::Event::Closed)
         window.close();
+
+      if (event.type == sf::Event::KeyReleased) {
+        if (event.key.code == sf::Keyboard::R) {
+          area = GameArea(sx, sy, m);
+
+          flag.setFillColor(sf::Color(150, 255, 150));
+          flag.setOutlineColor(sf::Color(130, 235, 130));
+
+          mine.setFillColor(sf::Color(255, 100, 100));
+          mine.setFillColor(sf::Color(235, 80, 80));
+        }
+      }
 
       if (event.type == sf::Event::MouseButtonReleased) {
         auto mouse_pos = sf::Mouse::getPosition(window);

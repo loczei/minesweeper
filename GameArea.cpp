@@ -8,14 +8,9 @@ GameArea::GameArea(unsigned int sx, unsigned int sy, unsigned int mines) {
   this->revealed = 0;
   this->mines = mines;
 
-  std::cout << "Generating new game area with size " << sx << " " << sy
-            << std::endl;
-
   for (int i = 0; i < mines;) {
     unsigned int x = rand() % sx;
     unsigned int y = rand() % sy;
-
-    std::cout << "New mine on " << x << " " << y << std::endl;
 
     if (this->get(x, y).is_mine())
       continue;
@@ -168,19 +163,14 @@ void GameArea::flagged_click(uint x, uint y) {
                         {0, 1},   {1, -1}, {1, 0},  {1, 1}};
   for (auto e : to_check) {
     try {
-      std::cout << "Getting b" << x + e[1] << " " << y + e[0] << std::endl;
       flags += this->get(x + e[1], y + e[0]).is_flagged();
     } catch (int e) {
     }
   }
 
-  std::cout << "Flags " << flags << std::endl;
-
   if (flags == mines) {
     for (auto e : to_check) {
       try {
-        std::cout << "Getting bruh " << x + e[1] << " " << y + e[0]
-                  << std::endl;
 
         if (!this->get(x + e[1], y + e[0]).is_clicked()) {
           this->click(x + e[1], y + e[0]);
