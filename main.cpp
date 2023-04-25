@@ -58,32 +58,33 @@ int main() {
 
   while (window.isOpen()) {
     sf::Event event;
-    while (window.pollEvent(event)) {
-      if (event.type == sf::Event::Closed)
-        window.close();
 
-      if (event.type == sf::Event::KeyReleased) {
-        if (event.key.code == sf::Keyboard::R) {
-          area = GameArea(sx, sy, m);
+    window.waitEvent(event);
 
-          flag.setFillColor(sf::Color(150, 255, 150));
-          flag.setOutlineColor(sf::Color(130, 235, 130));
+    if (event.type == sf::Event::Closed)
+      window.close();
 
-          mine.setFillColor(sf::Color(255, 100, 100));
-          mine.setFillColor(sf::Color(235, 80, 80));
-        }
+    if (event.type == sf::Event::KeyReleased) {
+      if (event.key.code == sf::Keyboard::R) {
+        area = GameArea(sx, sy, m);
+
+        flag.setFillColor(sf::Color(150, 255, 150));
+        flag.setOutlineColor(sf::Color(130, 235, 130));
+
+        mine.setFillColor(sf::Color(255, 100, 100));
+        mine.setFillColor(sf::Color(235, 80, 80));
       }
+    }
 
-      if (event.type == sf::Event::MouseButtonReleased) {
-        auto mouse_pos = sf::Mouse::getPosition(window);
-        uint x = floor(mouse_pos.x / 30);
-        uint y = floor(mouse_pos.y / 30);
-        if (event.mouseButton.button == sf::Mouse::Left) {
-          area.click(x, y);
-        } else {
-          if (!area.get(x, y).is_clicked())
-            area.flag(x, y);
-        }
+    if (event.type == sf::Event::MouseButtonReleased) {
+      auto mouse_pos = sf::Mouse::getPosition(window);
+      uint x = floor(mouse_pos.x / 30);
+      uint y = floor(mouse_pos.y / 30);
+      if (event.mouseButton.button == sf::Mouse::Left) {
+        area.click(x, y);
+      } else {
+        if (!area.get(x, y).is_clicked())
+          area.flag(x, y);
       }
     }
 
