@@ -28,6 +28,7 @@ public:
   void reveal_empty(uint, uint);
   bool check_win();
   void flagged_click(uint, uint);
+  void generate_map(uint, uint);
 };
 
 #endif

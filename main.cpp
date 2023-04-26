@@ -56,6 +56,8 @@ int main() {
   flag.setOutlineThickness(3.);
   flag.setOutlineColor(sf::Color(130, 235, 130));
 
+  bool generate_area = true;
+
   while (window.isOpen()) {
     sf::Event event;
 
@@ -67,6 +69,7 @@ int main() {
     if (event.type == sf::Event::KeyReleased) {
       if (event.key.code == sf::Keyboard::R) {
         area = GameArea(sx, sy, m);
+        generate_area = true;
 
         flag.setFillColor(sf::Color(150, 255, 150));
         flag.setOutlineColor(sf::Color(130, 235, 130));
@@ -80,6 +83,11 @@ int main() {
       auto mouse_pos = sf::Mouse::getPosition(window);
       uint x = floor(mouse_pos.x / 30);
       uint y = floor(mouse_pos.y / 30);
+
+      if (generate_area) {
+        area.generate_map(x, y);
+        generate_area = false;
+      }
       if (event.mouseButton.button == sf::Mouse::Left) {
         area.click(x, y);
       } else {

@@ -1,4 +1,6 @@
 #include "GameArea.hpp"
+#include <cmath>
+#include <cstdlib>
 #include <iostream>
 
 GameArea::GameArea(unsigned int sx, unsigned int sy, unsigned int mines) {
@@ -7,13 +9,29 @@ GameArea::GameArea(unsigned int sx, unsigned int sy, unsigned int mines) {
 
   this->revealed = 0;
   this->mines = mines;
+}
 
+void GameArea::generate_map(uint click_x, uint click_y) {
   for (int i = 0; i < mines;) {
-    unsigned int x = rand() % sx;
-    unsigned int y = rand() % sy;
+    unsigned int x = rand() % this->size_x();
+    unsigned int y = rand() % this->size_y();
 
     if (this->get(x, y).is_mine())
       continue;
+
+    if (click_x == x && click_y == y)
+      continue;
+
+    uint x_d = std::abs((long)x - (long)click_x);
+    uint y_d = std::abs((long)y - (long)click_y);
+
+    uint distance = floor(std::sqrt(std::pow(x_d, 2) + std::pow(y_d, 2)));
+
+    int chance = 105 - (distance * 5);
+
+    if (rand() % 100 + 1 <= chance) {
+      continue;
+    }
 
     this->get(x, y).set_mine(true);
     i++;
